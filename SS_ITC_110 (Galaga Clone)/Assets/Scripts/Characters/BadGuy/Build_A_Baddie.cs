@@ -8,22 +8,24 @@ public class Build_A_Baddie : MonoBehaviour
     //Put your own functions here!
     public BadGuyBrain badGuyBrain;
 
+    private Rigidbody2D rigidBody; 
+
+    public float knockback = 10f;
+
     private void Start()
     {
         badGuyBrain = GetComponent<BadGuyBrain>();
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        if (Vector3.Distance(this.gameObject.transform.position, badGuyBrain.player.transform.position) <= 2.0f)
-        {
-            Explode();
-        }
     }
 
-    public void Explode()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        badGuyBrain.player.GetComponent<CharacterBrain>().health--;
-        badGuyBrain.Despawn();
+        if (collision.gameObject.CompareTag("Player"))
+            rigidBody.position = new Vector2(rigidBody.position.x, rigidBody.position.y + knockback);
+            
     }
 }
